@@ -1,0 +1,89 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy-staging:
+    name: Deploy to staging
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+          service_account: ${{ secrets.GCP_SA_EMAIL }}
+
+      - uses: google-github-actions/setup-gcloud@v2
+
+      - uses: astral-sh/setup-uv@v5
+
+      - name: Deploy
+        run: |
+          uv export --no-hashes -o requirements.txt
+          gcloud functions deploy link-tracker-staging \
+            --gen2 \
+            --runtime=python314 \
+            --entry-point=main \
+            --source=. \
+            --region=us-central1 \
+            --project=${{ secrets.GCP_PROJECT_ID }} \
+            --set-env-vars="\
+              DISCORD_WEBHOOK=${{ secrets.DISCORD_WEBHOOK }},\
+              DISCORD_USER=${{ secrets.DISCORD_USER }},\
+              DEFAULT_URL=${{ secrets.DEFAULT_URL }},\
+              DATABASE_NAME=${{ secrets.DATABASE_NAME }},\
+              COLLECTION_NAME=${{ secrets.COLLECTION_NAME }},\
+              TEST_TOKEN=${{ secrets.TEST_TOKEN }}"
+
+      - name: Test
+        env:
+          FUNCTION_URL: ${{ secrets.FUNCTION_URL }}
+          TEST_TOKEN: ${{ secrets.TEST_TOKEN }}
+          DEFAULT_URL: ${{ secrets.DEFAULT_URL }}
+        run: uv run pytest tests/ --env=staging
+
+  deploy-prod:
+    name: Deploy to prod
+    needs: deploy-staging
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+          service_account: ${{ secrets.GCP_SA_EMAIL }}
+
+      - uses: google-github-actions/setup-gcloud@v2
+
+      - uses: astral-sh/setup-uv@v5
+
+      - name: Deploy
+        run: |
+          uv export --no-hashes -o requirements.txt
+          gcloud functions deploy link-tracker \
+            --gen2 \
+            --runtime=python314 \
+            --entry-point=main \
+            --source=. \
+            --region=us-central1 \
+            --project=${{ secrets.GCP_PROJECT_ID }} \
+            --set-env-vars="\
+              DISCORD_WEBHOOK=${{ secrets.DISCORD_WEBHOOK }},\
+              DISCORD_USER=${{ secrets.DISCORD_USER }},\
+              DEFAULT_URL=${{ secrets.DEFAULT_URL }},\
+              DATABASE_NAME=${{ secrets.DATABASE_NAME }},\
+              COLLECTION_NAME=${{ secrets.COLLECTION_NAME }},\
+              TEST_TOKEN=${{ secrets.TEST_TOKEN }}"
+
+      - name: Test
+        env:
+          FUNCTION_URL: ${{ secrets.FUNCTION_URL }}
+          TEST_TOKEN: ${{ secrets.TEST_TOKEN }}
+          DEFAULT_URL: ${{ secrets.DEFAULT_URL }}
+        run: uv run pytest tests/ --env=prod
