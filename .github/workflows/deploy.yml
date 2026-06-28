@@ -3,6 +3,11 @@ name: Deploy
 on:
   push:
     branches: [main]
+    paths:
+      - "main.py"
+      - "db.py"
+      - "utils.py"
+      - ".github/workflows/deploy.yml"
 
 permissions:
   contents: read
@@ -43,7 +48,7 @@ jobs:
               COLLECTION_NAME=${{ secrets.COLLECTION_NAME }},\
               TEST_TOKEN=${{ secrets.TEST_TOKEN }}"
 
-      - name: Test
+      - name: E2E Test
         env:
           FUNCTION_URL: ${{ secrets.FUNCTION_URL }}
           TEST_TOKEN: ${{ secrets.TEST_TOKEN }}
@@ -85,7 +90,7 @@ jobs:
               COLLECTION_NAME=${{ secrets.COLLECTION_NAME }},\
               TEST_TOKEN=${{ secrets.TEST_TOKEN }}"
 
-      - name: Test
+      - name: E2E Test
         env:
           FUNCTION_URL: ${{ secrets.FUNCTION_URL }}
           TEST_TOKEN: ${{ secrets.TEST_TOKEN }}

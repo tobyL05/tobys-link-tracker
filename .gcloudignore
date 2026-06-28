@@ -22,3 +22,4 @@ README.md
 .python-version
 tests/
 #!include:.gitignore
+!requirements.txt
