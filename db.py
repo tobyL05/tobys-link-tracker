@@ -7,8 +7,14 @@ from utils import require
 DATABASE_NAME = require("DATABASE_NAME")
 COLLECTION_NAME = require("COLLECTION_NAME")
 
-_client = firestore.Client(database=DATABASE_NAME)
-db = _client.collection(COLLECTION_NAME)
+_db = None
+
+
+def _get_db():
+    global _db
+    if _db is None:
+        _db = firestore.Client(database=DATABASE_NAME).collection(COLLECTION_NAME)
+    return _db
 
 
 class LinkNotFoundError(Exception):
@@ -39,7 +45,7 @@ class Link:
 
 def _fetch(id: str) -> firestore.DocumentSnapshot:
     try:
-        doc: firestore.DocumentSnapshot = db.document(id).get()  # type: ignore[assignment]
+        doc: firestore.DocumentSnapshot = _get_db().document(id).get()  # type: ignore[assignment]
         if not doc.exists:
             raise LinkNotFoundError(id)
     except Exception as e:
@@ -57,32 +63,33 @@ def get_link(id: str) -> Link:
 
 def get_link_with_update(id: str) -> Link:
     link = get_link(id)
-    db.document(id).update(
+    _get_db().document(id).update(
         {"clicks": firestore.Increment(1), "last_opened": firestore.SERVER_TIMESTAMP}
     )
     return link
 
 
 def list_links() -> list[tuple[str, Link]]:
+    db = _get_db()
     docs = db.stream()
     return [(doc.id, Link.from_dict(doc.to_dict())) for doc in docs if doc.to_dict()]  # type: ignore[union-attr]
 
 
 def delete_link(id: str) -> None:
     _fetch(id)
-    db.document(id).delete()
+    _get_db().document(id).delete()
 
 
 def update_url(id: str, url) -> None:
-    db.document(id).update({"url": url})
+    _get_db().document(id).update({"url": url})
 
 
 def update_description(id: str, description: str) -> None:
-    db.document(id).update({"description": description})
+    _get_db().document(id).update({"description": description})
 
 
 def create_link(id: str, url: str, description: str) -> None:
-    db.document(id).set(
+    _get_db().document(id).set(
         {
             "url": url,
             "description": description,
