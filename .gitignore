@@ -13,3 +13,6 @@ wheels/
 .env.staging
 
 *.sh
+
+# Generated on deploy
+requirements.txt
