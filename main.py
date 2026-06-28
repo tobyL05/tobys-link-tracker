@@ -8,6 +8,7 @@ from db import LinkNotFoundError, get_link, get_link_with_update
 DISCORD_WEBHOOK = require("DISCORD_WEBHOOK")
 DISCORD_USER = require("DISCORD_USER")
 DEFAULT_URL = require("DEFAULT_URL")
+TEST_TOKEN = require("TEST_TOKEN")
 
 
 def _notify(message: str) -> None:
@@ -35,11 +36,15 @@ def main(request: flask.Request):
         return redirect(DEFAULT_URL)
 
     bot = is_bot(request)
-    notify = notify_async if not bot else lambda _: None
-    fetch = get_link if bot else get_link_with_update
+    test = request.headers.get("X-Test-Token") == TEST_TOKEN
+    silent = bot or test
+    notify = notify_async if not silent else lambda _: None
+    fetch = get_link if silent else get_link_with_update
 
     if bot:
         print("Bot detected.")
+    if test:
+        print("Test client detected.")
 
     try:
         link = fetch(id)

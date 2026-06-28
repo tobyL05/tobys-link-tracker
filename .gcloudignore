@@ -14,9 +14,11 @@
 .gitignore
 
 node_modules
+.github
 cli.py
 pyproject.toml
 uv.lock
 README.md
 .python-version
+tests/
 #!include:.gitignore

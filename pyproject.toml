@@ -14,6 +14,11 @@ dependencies = [
     "questionary>=2.1.1",
 ]
 
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+]
+
 [project.scripts]
 links = "cli:main"
 
