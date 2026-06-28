@@ -1,7 +1,7 @@
 [project]
-name = "src"
+name = "link-tracker"
 version = "0.1.0"
-description = "Add your description here"
+description = "toby's link tracker"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
@@ -14,3 +14,8 @@ dependencies = [
     "questionary>=2.1.1",
 ]
 
+[project.scripts]
+links = "cli:main"
+
+[tool.setuptools]
+py-modules = ["cli", "db", "utils"]
