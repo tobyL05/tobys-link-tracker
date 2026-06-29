@@ -38,6 +38,7 @@ jobs:
           DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
           COLLECTION_NAME: ${{ secrets.COLLECTION_NAME }}
           TEST_TOKEN: ${{ secrets.TEST_TOKEN }}
+          FUNCTION_URL: ${{ secrets.FUNCTION_URL }}
         run: |
           uv export --no-hashes -o requirements.txt
           gcloud functions deploy link-tracker-staging \
@@ -47,7 +48,7 @@ jobs:
             --source=. \
             --region=us-central1 \
             --project=${{ secrets.GCP_PROJECT_ID }} \
-            --set-env-vars="DISCORD_WEBHOOK=${DISCORD_WEBHOOK},DISCORD_USER=${DISCORD_USER},DEFAULT_URL=${DEFAULT_URL},DATABASE_NAME=${DATABASE_NAME},COLLECTION_NAME=${COLLECTION_NAME},TEST_TOKEN=${TEST_TOKEN}"
+            --set-env-vars="DISCORD_WEBHOOK=${DISCORD_WEBHOOK},DISCORD_USER=${DISCORD_USER},DEFAULT_URL=${DEFAULT_URL},DATABASE_NAME=${DATABASE_NAME},COLLECTION_NAME=${COLLECTION_NAME},TEST_TOKEN=${TEST_TOKEN},FUNCTION_URL=${FUNCTION_URL}"
 
       - name: E2E Test
         env:
@@ -81,6 +82,7 @@ jobs:
           DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
           COLLECTION_NAME: ${{ secrets.COLLECTION_NAME }}
           TEST_TOKEN: ${{ secrets.TEST_TOKEN }}
+          FUNCTION_URL: ${{ secrets.FUNCTION_URL }}
         run: |
           uv export --no-hashes -o requirements.txt
           gcloud functions deploy link-tracker \
@@ -90,7 +92,7 @@ jobs:
             --source=. \
             --region=us-central1 \
             --project=${{ secrets.GCP_PROJECT_ID }} \
-            --set-env-vars="DISCORD_WEBHOOK=${DISCORD_WEBHOOK},DISCORD_USER=${DISCORD_USER},DEFAULT_URL=${DEFAULT_URL},DATABASE_NAME=${DATABASE_NAME},COLLECTION_NAME=${COLLECTION_NAME},TEST_TOKEN=${TEST_TOKEN}"
+            --set-env-vars="DISCORD_WEBHOOK=${DISCORD_WEBHOOK},DISCORD_USER=${DISCORD_USER},DEFAULT_URL=${DEFAULT_URL},DATABASE_NAME=${DATABASE_NAME},COLLECTION_NAME=${COLLECTION_NAME},TEST_TOKEN=${TEST_TOKEN},FUNCTION_URL=${FUNCTION_URL}"
 
       - name: E2E Test
         env:

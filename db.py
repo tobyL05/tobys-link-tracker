@@ -80,12 +80,8 @@ def delete_link(id: str) -> None:
     _get_db().document(id).delete()
 
 
-def update_url(id: str, url) -> None:
-    _get_db().document(id).update({"url": url})
-
-
-def update_description(id: str, description: str) -> None:
-    _get_db().document(id).update({"description": description})
+def update_link(id: str, url: str, description: str) -> None:
+    _get_db().document(id).update({"url": url, "description": description})
 
 
 def create_link(id: str, url: str, description: str) -> None:

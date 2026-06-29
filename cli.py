@@ -7,11 +7,10 @@ from db import (
     delete_link,
     get_link,
     list_links,
-    update_description,
-    update_url,
+    update_link,
 )
 
-URL = require("FUNCTION_URL")
+FUNCTION_URL = require("FUNCTION_URL")
 
 
 def pick_link(prompt: str) -> str | None:
@@ -30,8 +29,12 @@ def _truncate(s: str, n: int) -> str:
     return s if len(s) <= n else s[: n - 1] + "…"
 
 
-def _clean_url(url: str) -> str:
-    return url.strip().rstrip(".,;:!?")
+def _parse_url(url: str) -> str | None:
+    url = url.strip().rstrip(".,;:!?")
+    if url.rstrip("/") == FUNCTION_URL.rstrip("/"):
+        print("Error: URL cannot point to the link tracker itself.")
+        return None
+    return url
 
 
 def handle_list() -> None:
@@ -68,12 +71,12 @@ def handle_list() -> None:
 def handle_create() -> None:
     url = questionary.text("URL:").ask()
     description = questionary.text("Description:").ask()
-    if not url or not description:
+    if not url or not description or not (url := _parse_url(url)):
         return
     custom_id = questionary.text("ID (leave empty to generate):").ask()
     id = custom_id.strip() if custom_id and custom_id.strip() else generate(size=8)
-    create_link(id, _clean_url(url), description)
-    print(f"Created {URL}/{id}")
+    create_link(id, url, description)
+    print(f"Created {FUNCTION_URL}/{id}")
 
 
 def handle_edit() -> None:
@@ -87,10 +90,9 @@ def handle_edit() -> None:
         return
     url = questionary.text("URL:", default=link.url).ask()
     description = questionary.text("Description:", default=link.description).ask()
-    if url is None or description is None:
+    if url is None or description is None or not (url := _parse_url(url)):
         return
-    update_url(id, _clean_url(url))
-    update_description(id, description)
+    update_link(id, url, description)
     print(f"Updated {id}")
 
 
