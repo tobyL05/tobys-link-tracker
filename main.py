@@ -2,6 +2,7 @@ import threading
 import functions_framework
 import flask
 import httpx
+from datetime import datetime
 from utils import is_bot, require, validate_url
 from db import LinkNotFoundError, get_link, get_link_with_update
 
@@ -59,5 +60,5 @@ def main(request: flask.Request):
         print(f"Invalid link {id}: {error}")
         return redirect(DEFAULT_URL)
 
-    notify(link.description)
+    notify(f"[{datetime.now()}] {link.description}")
     return redirect(link.url)
