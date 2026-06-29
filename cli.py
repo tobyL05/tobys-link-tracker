@@ -1,6 +1,6 @@
 import questionary
 from nanoid import generate
-from utils import require
+from utils import require, validate_url
 from db import (
     LinkNotFoundError,
     create_link,
@@ -31,8 +31,8 @@ def _truncate(s: str, n: int) -> str:
 
 def _parse_url(url: str) -> str | None:
     url = url.strip().rstrip(".,;:!?")
-    if url.rstrip("/") == FUNCTION_URL.rstrip("/"):
-        print("Error: URL cannot point to the link tracker itself.")
+    if error := validate_url(url, FUNCTION_URL):
+        print(f"Error: {error}")
         return None
     return url
 
