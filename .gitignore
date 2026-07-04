@@ -16,3 +16,5 @@ wheels/
 
 # Generated on deploy
 requirements.txt
+
+scripts/
