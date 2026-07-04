@@ -19,7 +19,7 @@ def pick_link(prompt: str) -> str | None:
         print("No links found.")
         return None
     choices = [
-        questionary.Choice(title=f"{id}  {link.url}  {link.description}", value=id)
+        questionary.Choice(title=f"{id}  {link.url}  {link.label}", value=id)
         for id, link in links
     ]
     return questionary.select(prompt, choices=choices).ask()
@@ -43,12 +43,12 @@ def handle_list() -> None:
         print("No links found.")
         return
 
-    headers = ("ID", "URL", "Description", "Clicks", "Created", "Last Opened")
+    headers = ("ID", "URL", "label", "Clicks", "Created", "Last Opened")
     rows = [
         (
             id,
             _truncate(link.url, 40),
-            _truncate(link.description, 30),
+            _truncate(link.label, 30),
             str(link.clicks),
             link.created_at.strftime("%Y-%m-%d"),
             link.last_opened.strftime("%Y-%m-%d") if link.last_opened else "—",
@@ -89,7 +89,7 @@ def handle_edit() -> None:
         print(f"No link found with id {id}")
         return
     url = questionary.text("URL:", default=link.url).ask()
-    description = questionary.text("Description:", default=link.description).ask()
+    description = questionary.text("Description:", default=link.label).ask()
     if url is None or description is None or not (url := _parse_url(url)):
         return
     update_link(id, url, description)

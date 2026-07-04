@@ -24,7 +24,7 @@ class LinkNotFoundError(Exception):
 @dataclass
 class Link:
     url: str
-    description: str
+    label: str
     clicks: int
     created_at: datetime
     last_opened: datetime | None
@@ -33,7 +33,7 @@ class Link:
     def from_dict(cls, data: dict[str, Any]) -> "Link":
         return cls(
             url=data["url"],
-            description=data["description"],
+            label=data["label"],
             clicks=data["clicks"],
             created_at=data["created_at"],
             last_opened=data["last_opened"],
@@ -80,15 +80,15 @@ def delete_link(id: str) -> None:
     _get_db().document(id).delete()
 
 
-def update_link(id: str, url: str, description: str) -> None:
-    _get_db().document(id).update({"url": url, "description": description})
+def update_link(id: str, url: str, label: str) -> None:
+    _get_db().document(id).update({"url": url, "label": label})
 
 
-def create_link(id: str, url: str, description: str) -> None:
+def create_link(id: str, url: str, label: str) -> None:
     _get_db().document(id).set(
         {
             "url": url,
-            "description": description,
+            "label": label,
             "clicks": 0,
             "created_at": datetime.now(timezone.utc),
             "last_opened": None,
