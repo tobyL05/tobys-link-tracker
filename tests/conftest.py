@@ -19,7 +19,7 @@ def load_env(request):
 def client(load_env):
     with httpx.Client(
         base_url=os.environ["FUNCTION_URL"],
-        headers={"X-Test-Token": os.environ["TEST_TOKEN"]},
+        params={"preview": "true"},
         follow_redirects=False,
     ) as c:
         yield c

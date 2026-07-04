@@ -7,7 +7,6 @@ from utils import is_bot, require, validate_url
 from db import LinkNotFoundError, get_link, get_link_with_update
 
 WEBHOOK_URL = require("WEBHOOK_URL")
-TEST_TOKEN = require("TEST_TOKEN")
 DEFAULT_URL = require("DEFAULT_URL")
 FUNCTION_URL = require("FUNCTION_URL")
 
@@ -34,15 +33,15 @@ def main(request: flask.Request):
         return redirect(DEFAULT_URL)
 
     bot = is_bot(request)
-    test = request.headers.get("X-Test-Token") == TEST_TOKEN
-    silent = bot or test
-    notify = notify_async if not silent else lambda _: None
+    preview = request.args.get("preview") == "true"
+    silent = bot or preview
+    notify = notify_async if not bot else lambda _: None
     fetch = get_link if silent else get_link_with_update
 
     if bot:
         print("Bot detected.")
-    if test:
-        print("Test client detected.")
+    if preview:
+        print("Preview mode.")
 
     try:
         link = fetch(id)
