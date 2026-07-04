@@ -6,18 +6,14 @@ from datetime import datetime
 from utils import is_bot, require, validate_url
 from db import LinkNotFoundError, get_link, get_link_with_update
 
-DISCORD_WEBHOOK = require("DISCORD_WEBHOOK")
-DISCORD_USER = require("DISCORD_USER")
-DEFAULT_URL = require("DEFAULT_URL")
+WEBHOOK_URL = require("WEBHOOK_URL")
 TEST_TOKEN = require("TEST_TOKEN")
+DEFAULT_URL = require("DEFAULT_URL")
 FUNCTION_URL = require("FUNCTION_URL")
 
 
 def _notify(message: str) -> None:
-    httpx.post(
-        DISCORD_WEBHOOK,
-        json={"content": f"<@{DISCORD_USER}> {message}"},
-    )
+    httpx.post(WEBHOOK_URL, json={"content": message, "text": message})
 
 
 def notify_async(message: str) -> None:

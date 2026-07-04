@@ -32,8 +32,7 @@ jobs:
 
       - name: Deploy
         env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-          DISCORD_USER: ${{ secrets.DISCORD_USER }}
+          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
           DEFAULT_URL: ${{ secrets.DEFAULT_URL }}
           DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
           COLLECTION_NAME: ${{ secrets.COLLECTION_NAME }}
@@ -48,7 +47,7 @@ jobs:
             --source=. \
             --region=us-central1 \
             --project=${{ secrets.GCP_PROJECT_ID }} \
-            --set-env-vars="DISCORD_WEBHOOK=${DISCORD_WEBHOOK},DISCORD_USER=${DISCORD_USER},DEFAULT_URL=${DEFAULT_URL},DATABASE_NAME=${DATABASE_NAME},COLLECTION_NAME=${COLLECTION_NAME},TEST_TOKEN=${TEST_TOKEN},FUNCTION_URL=${FUNCTION_URL}"
+            --set-env-vars="WEBHOOK_URL=${WEBHOOK_URL},DEFAULT_URL=${DEFAULT_URL},DATABASE_NAME=${DATABASE_NAME},COLLECTION_NAME=${COLLECTION_NAME},TEST_TOKEN=${TEST_TOKEN},FUNCTION_URL=${FUNCTION_URL}"
 
       - name: E2E Test
         env:
@@ -76,8 +75,7 @@ jobs:
 
       - name: Deploy
         env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-          DISCORD_USER: ${{ secrets.DISCORD_USER }}
+          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
           DEFAULT_URL: ${{ secrets.DEFAULT_URL }}
           DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
           COLLECTION_NAME: ${{ secrets.COLLECTION_NAME }}
@@ -92,7 +90,7 @@ jobs:
             --source=. \
             --region=us-central1 \
             --project=${{ secrets.GCP_PROJECT_ID }} \
-            --set-env-vars="DISCORD_WEBHOOK=${DISCORD_WEBHOOK},DISCORD_USER=${DISCORD_USER},DEFAULT_URL=${DEFAULT_URL},DATABASE_NAME=${DATABASE_NAME},COLLECTION_NAME=${COLLECTION_NAME},TEST_TOKEN=${TEST_TOKEN},FUNCTION_URL=${FUNCTION_URL}"
+            --set-env-vars="WEBHOOK_URL=${WEBHOOK_URL},DEFAULT_URL=${DEFAULT_URL},DATABASE_NAME=${DATABASE_NAME},COLLECTION_NAME=${COLLECTION_NAME},TEST_TOKEN=${TEST_TOKEN},FUNCTION_URL=${FUNCTION_URL}"
 
       - name: E2E Test
         env:
