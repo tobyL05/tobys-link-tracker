@@ -1,4 +1,5 @@
 import httpx
+import pytest
 
 
 def test_empty_path_redirects_to_default(client: httpx.Client, default_url: str):
@@ -13,8 +14,10 @@ def test_unknown_id_redirects_to_default(client: httpx.Client, default_url: str)
     assert response.headers["location"] == default_url
 
 
-def test_valid_link_redirects(client: httpx.Client):
-    response = client.get("/e2e-test-link")
+@pytest.mark.parametrize("preview", [True, False])
+def test_valid_link_redirects(client: httpx.Client, preview: bool):
+    params = {"preview": "true"} if preview else {}
+    response = client.get("/e2e-test-link", params=params)
     assert response.status_code == 302
     assert response.headers["location"] == "https://example.com"
 
