@@ -55,5 +55,5 @@ def main(request: flask.Request):
         print(f"Invalid link {id}: {error}")
         return redirect(DEFAULT_URL)
 
-    notify(f"[{datetime.now()}] {link.label}")
+    notify(f"{'[PREVIEW]' if preview else ''}[{datetime.now()}] {link.label}")
     return redirect(link.url)
