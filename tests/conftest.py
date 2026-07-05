@@ -5,12 +5,14 @@ from dotenv import load_dotenv
 
 
 def pytest_addoption(parser):
-    parser.addoption("--env", choices=["prod", "staging"], required=True)
+    parser.addoption("--env", choices=["prod", "staging"], required=False)
 
 
 @pytest.fixture(scope="session", autouse=True)
 def load_env(request):
     env = request.config.getoption("--env")
+    if env is None:
+        return
     env_file = ".env" if env == "prod" else ".env.staging"
     load_dotenv(env_file)
 
@@ -19,7 +21,6 @@ def load_env(request):
 def client(load_env):
     with httpx.Client(
         base_url=os.environ["FUNCTION_URL"],
-        params={"preview": "true"},
         follow_redirects=False,
     ) as c:
         yield c

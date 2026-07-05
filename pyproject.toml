@@ -24,3 +24,7 @@ links = "cli:main"
 
 [tool.setuptools]
 py-modules = ["cli", "db", "utils"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

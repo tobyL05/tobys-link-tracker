@@ -48,6 +48,9 @@ jobs:
             --project=${{ secrets.GCP_PROJECT_ID }} \
             --set-env-vars="WEBHOOK_URL=${WEBHOOK_URL},DEFAULT_URL=${DEFAULT_URL},DATABASE_NAME=${DATABASE_NAME},COLLECTION_NAME=${COLLECTION_NAME},FUNCTION_URL=${FUNCTION_URL}"
 
+      - name: Unit tests
+        run: uv run pytest tests/test_main.py
+
       - name: E2E Test
         env:
           FUNCTION_URL: ${{ secrets.FUNCTION_URL }}
