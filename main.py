@@ -33,7 +33,7 @@ def main(request: flask.Request):
         return redirect(DEFAULT_URL)
 
     bot = is_bot(request)
-    preview = request.args.get("preview") == "true"
+    preview = request.args.get("preview", "").lower() == "true"
     silent = bot or preview
     notify = notify_async if not bot else lambda _: None
     fetch = get_link if silent else get_link_with_update

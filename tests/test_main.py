@@ -70,6 +70,14 @@ class TestPreview:
         assert msg.startswith("[PREVIEW]")
         assert "My Link" in msg
 
+    def test_case_insensitive(self, get_link, get_link_with_update, notify_async):
+        get_link.return_value = _link()
+        _call("/abc", params={"preview": "True"})
+        get_link.assert_called_once_with("abc")
+        get_link_with_update.assert_not_called()
+        msg = notify_async.call_args[0][0]
+        assert msg.startswith("[PREVIEW]")
+
 
 @patch("main.notify_async")
 @patch("main.get_link_with_update")
