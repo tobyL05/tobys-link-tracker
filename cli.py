@@ -1,16 +1,22 @@
+import sys
+
 import questionary
 from nanoid import generate
-from utils import require, validate_url
-from db import (
-    LinkNotFoundError,
-    create_link,
-    delete_link,
-    get_link,
-    list_links,
-    update_link,
-)
+from utils import ENV_PATH, require, validate_url
 
-FUNCTION_URL = require("FUNCTION_URL")
+try:
+    from db import (
+        LinkNotFoundError,
+        create_link,
+        delete_link,
+        get_link,
+        list_links,
+        update_link,
+    )
+
+    FUNCTION_URL = require("FUNCTION_URL")
+except RuntimeError as e:
+    sys.exit(f"{e}. Ensure environment variables are set in {ENV_PATH} and try again.")
 
 
 def pick_link(prompt: str) -> str | None:
