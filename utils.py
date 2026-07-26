@@ -1,8 +1,12 @@
 import os
+from pathlib import Path
+
 import flask
 from dotenv import load_dotenv
 
-load_dotenv()
+ENV_PATH = Path(__file__).parent / ".env"
+
+load_dotenv(ENV_PATH)
 
 BOT_UA_PATTERNS = (
     "linkedinbot",

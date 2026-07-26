@@ -12,6 +12,7 @@ dependencies = [
     "nanoid>=2.0.0",
     "python-dotenv>=1.2.2",
     "questionary>=2.1.1",
+    "rich>=15.0.0",
 ]
 
 [dependency-groups]
@@ -23,7 +24,7 @@ dev = [
 links = "cli:main"
 
 [tool.setuptools]
-py-modules = ["cli", "db", "utils"]
+py-modules = ["cli", "db", "utils", "infra"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
