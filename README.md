@@ -1,6 +1,6 @@
 # toby's link tracker
 
-A simple self-hosted link redirector with click tracking and webhook notifications.
+A free, self-hosted link shortener for your own domain, with click tracking and notifications.
 
 ### Prerequisites
 
@@ -12,7 +12,7 @@ A simple self-hosted link redirector with click tracking and webhook notificatio
 
 - Clone the repository and `cd` into it.
 - Create a `.env` following `.env.example`.
-- Run `uv run infra.py --apply` to provision the cloud function + database, and install the `links` CLI tool.
+- Run `uv run infra.py --apply` to provision the cloud function, database, and install the `links` CLI tool.
 - Run `links` in your terminal.
 
 > The default webhook setup is for a Discord channel — see [Webhooks](#webhooks) below for more info.
@@ -46,12 +46,14 @@ For broader webhook support (Slack, Telegram, etc.) without hand-rolling each pr
 
 ### How it works
 
-Visiting the tracked link spins up an instance of the cloud function, grabs the URL path, and:
+Visiting the tracked link spins up an instance of the cloud run service, grabs the URL path, and:
 
 - fetches the actual URL + attached label
 - sends the attached label to the webhook
 - redirects the user to the URL
 
-If the URL path does not exist in firestore, the user is redirected to the default URL. Webhook notifications are also sent when the URL path isn't found in firestore.
+If the URL path does not exist in Firestore, the user is redirected to the default URL. Webhook notifications are also sent when the URL path isn't found in Firestore. 
+
+Since the service only runs on link visits, hosting is effectively free for personal use.
 
 <img width="1922" height="1020" alt="image" src="https://github.com/user-attachments/assets/50e00006-154e-4e4b-8c2f-b06f022000e3" />
