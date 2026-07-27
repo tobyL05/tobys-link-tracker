@@ -26,7 +26,6 @@ A simple self-hosted link redirector with click tracking and webhook notificatio
  » Create
    Edit
    Delete
-   Setup
 
 ❯ links
 ? What do you want to do? Create
@@ -36,6 +35,8 @@ A simple self-hosted link redirector with click tracking and webhook notificatio
 
 Generated tracked link https://<link to cloud function>/openai
 ```
+
+<img width="618" height="69" alt="Screenshot 2026-07-26 at 21 24 16" src="https://github.com/user-attachments/assets/266f9f33-7883-44b3-b0eb-eb2a70eb1ed8" />
 
 ### Webhooks
 
