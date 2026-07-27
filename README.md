@@ -34,6 +34,12 @@ A free, self-hosted link shortener for your own domain, with click tracking and 
 ? ID (leave empty to generate): openai
 
 Generated tracked link https://<link to cloud function>/openai
+
+❯ links
+? What do you want to do? List
+ID      URL                  label                           Clicks  Created     Last Opened
+──────  ───────────────────  ──────────────────────────────  ──────  ──────────  ───────────
+openai  https://tobylau.xyz  Sam Altman (Founder @ OpenAI)…  1       2026-07-27  2026-07-27
 ```
 
 <img width="618" height="69" alt="Screenshot 2026-07-26 at 21 24 16" src="https://github.com/user-attachments/assets/266f9f33-7883-44b3-b0eb-eb2a70eb1ed8" />
@@ -54,6 +60,6 @@ Visiting the tracked link spins up an instance of the cloud run service, grabs t
 
 If the URL path does not exist in Firestore, the user is redirected to the default URL. Webhook notifications are also sent when the URL path isn't found in Firestore. 
 
-Since the service only runs on link visits, hosting is effectively free for personal use.
+Since cloud services are pay-per-use, hosting is effectively free for personal use.
 
 <img width="1922" height="1020" alt="image" src="https://github.com/user-attachments/assets/50e00006-154e-4e4b-8c2f-b06f022000e3" />
